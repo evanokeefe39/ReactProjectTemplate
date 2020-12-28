@@ -1,5 +1,9 @@
 //export { default as Content } from './Content';
 //export { default as Footer } from './Footer';
-//export { default as Header } from './Header';
+export { default as SignUpPage } from './SignUpPage';
+export { default as LoginPage } from './LoginPage';
+export { default as LandingPage } from './LandingPage';
 export { default as HomePage } from './HomePage';
 export { default as Test1 } from './Test1';
+export { default as Test2 } from './Test2';
+export { default as Test3 } from './Test3';
