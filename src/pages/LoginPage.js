@@ -1,18 +1,28 @@
 import React, {useContext} from "react";
+import {Redirect } from 'react-router-dom';
 import {SecurityContext} from '../components/SecurityContext';
+import LoginForm from '../components/LoginForm';
+
+import Grid from '@material-ui/core/Grid';
 
 export default function LoginPage() {
-  const {user, setUser} = useContext(SecurityContext);
+  
+  const {user} = useContext(SecurityContext);
 
     return (
       <div>
-      <h2>LoginPage</h2>
-      <pre>{JSON.stringify(user, null, 2)}</pre>
-      {user? (
-        <button onClick={() => setUser(null)}>Log out</button>
-      ): (
-        <button onClick={() => setUser("Authenticated")}>Log in</button>
-      )}
-      </div>
-    );
+      {user?(
+        <Redirect to="/home"/>):(<Grid
+        container
+        direction="column"
+        justify="center"
+        alignItems="center"
+      >
+          <h2>LoginPage</h2>
+          <LoginForm/>
+  
+        </Grid>)}
+        </div>
+      
+    )
   }

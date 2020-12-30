@@ -1,16 +1,20 @@
 import React, {useContext} from "react";
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import {SecurityContext} from './SecurityContext';
 
 
 export default function PrivateRoute(props) {
-    const value = useContext(SecurityContext);
+    const {user} = useContext(SecurityContext);
     
-
     return (
-        <Route {...props}/>
-        
-        
-        
+        <div>
+            {user? (
+            <Route {...props}/>
+            ):(
+            <Route {...props}>
+                <Redirect to="/login"/>
+            </Route>
+            )}
+        </div>
     );
   }

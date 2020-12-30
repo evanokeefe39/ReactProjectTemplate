@@ -1,5 +1,10 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import {Link} from 'react-router-dom';
+
+import {SecurityContext} from '../SecurityContext';
+
 import { fade, makeStyles } from '@material-ui/core/styles';
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -8,7 +13,6 @@ import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import {Link} from 'react-router-dom';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -83,30 +87,36 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PrimarySearchAppBar() {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [anchorEl2, setAnchorEl2] = React.useState(null);
+  const {user, setUser} = useContext(SecurityContext);
+
+  const [profileMenuAnchor, setProfileMenuAnchor] = React.useState(null);
+  const [drawerMenuAnchor, setDrawerMenuAnchor] = React.useState(null);
   
 
-  const isMenuOpen = Boolean(anchorEl);
-  const isDrawerMenuOpen = Boolean(anchorEl2);
+  const isMenuOpen = Boolean(profileMenuAnchor);
+  const isDrawerMenuOpen = Boolean(drawerMenuAnchor);
   
   
 
   const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-    console.log("profile");
+    setProfileMenuAnchor(event.currentTarget);
   };
 
   const handleDrawerMenuOpen = (event) => {
-    setAnchorEl2(event.currentTarget);
-    console.log("Drawer");
+    setDrawerMenuAnchor(event.currentTarget);
   };
 
   
 
   const handleMenuClose = () => {
-    setAnchorEl(null);
-    setAnchorEl2(null);
+    setProfileMenuAnchor(null);
+    setDrawerMenuAnchor(null);
+    };
+
+  const handleMenuCloseLogOut = () => {
+    setProfileMenuAnchor(null);
+    setDrawerMenuAnchor(null);
+    setUser(null);
     };
 
   
@@ -114,7 +124,7 @@ export default function PrimarySearchAppBar() {
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
-      anchorEl={anchorEl}
+      anchorEl={profileMenuAnchor}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       id={menuId}
       keepMounted
@@ -124,13 +134,18 @@ export default function PrimarySearchAppBar() {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      {user? (
+      <MenuItem onClick={handleMenuCloseLogOut}>Log Out</MenuItem>
+      ):(
+      <MenuItem component={Link} to='/login' onClick={handleMenuClose}>Log in</MenuItem>)}
+      
     </Menu>
   );
 
   const drawerMenuId = 'primary-search-drawer-menu';
   const renderDrawerMenu = (
     <Menu
-      anchorEl={anchorEl2}
+      anchorEl={drawerMenuAnchor}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       id={drawerMenuId}
       keepMounted
@@ -138,15 +153,24 @@ export default function PrimarySearchAppBar() {
       open={isDrawerMenuOpen}
       onClose={handleMenuClose}
     >
-    <MenuItem component={Link} to='/Test1' onClick={handleMenuClose}>
-      Test1
-    </MenuItem>
-    <MenuItem component={Link} to='/Test2' onClick={handleMenuClose}>
-      Test2
-    </MenuItem>
-    <MenuItem component={Link} to='/Test3' onClick={handleMenuClose}>
-      Test3
-    </MenuItem>
+    
+    {user?(
+      <div>
+        <MenuItem component={Link} to='/home' onClick={handleMenuClose}>
+          Home
+        </MenuItem>
+        <MenuItem component={Link} to='/Test2' onClick={handleMenuClose}>
+          Test2
+        </MenuItem>
+        <MenuItem component={Link} to='/Test3' onClick={handleMenuClose}>
+          Test3
+        </MenuItem>
+    </div>
+    ):(
+      <MenuItem component={Link} to='/' onClick={handleMenuClose}>
+        Home
+      </MenuItem>
+  )}
         
       
       
@@ -170,7 +194,7 @@ export default function PrimarySearchAppBar() {
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            Material-UI
+            My App
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -186,28 +210,35 @@ export default function PrimarySearchAppBar() {
             />
           </div>
           <div className={classes.grow} />
-          <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
+            {user ? (
+            <div className={classes.sectionDesktop}>
+              <IconButton aria-label="show 4 new mails" color="inherit">
+                <Badge badgeContent={4} color="secondary">
+                  <MailIcon />
+                </Badge>
+              </IconButton>
+              <IconButton aria-label="show 17 new notifications" color="inherit">
+                <Badge badgeContent={17} color="secondary">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+            </div>
+              ):(
+                null
+              )}
+            
+            <div className={classes.sectionDesktop}>
+              <IconButton
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
               <AccountCircle />
-            </IconButton>
-          </div>
+              </IconButton>
+            </div>
         </Toolbar>
       </AppBar>
       {renderDrawerMenu}

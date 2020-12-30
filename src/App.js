@@ -22,11 +22,13 @@ function App() {
         <Switch>
           <SecurityContext.Provider value={securityProviderObj}>
 
-            <MainLayout>
+            
 
+            <MainLayout>
               <Route exact path="/" component={LandingPage}/>
               <Route exact path="/login" component={LoginPage}/>
               <Route exact path="/signup" component={SignUpPage}/>
+              
               
               <PrivateRoute exact path="/home" component={HomePage}/>
               <PrivateRoute exact path="/Test1" component={Test1}/>
