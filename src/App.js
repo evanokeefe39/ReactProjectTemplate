@@ -1,4 +1,4 @@
-import {useState, useMemo} from 'react';
+import React, {useState, useMemo} from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import {MainLayout} from './components/Layout';
 import PrivateRoute from './components/PrivateRoute';
@@ -10,6 +10,9 @@ import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import LandingPage from './pages/LandingPage';
 import { SecurityContext } from './components/SecurityContext';
+import { CssBaseline } from '@material-ui/core';
+import {Theme} from './components/Theme';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -17,7 +20,9 @@ function App() {
   const securityProviderObj = useMemo(()=>({user, setUser}), [user, setUser]);
 
   return (
-    
+    <React.Fragment>
+      <CssBaseline/>
+      <ThemeProvider theme = {Theme}>
       <BrowserRouter>
         <Switch>
           <SecurityContext.Provider value={securityProviderObj}>
@@ -41,7 +46,8 @@ function App() {
             
           
       </BrowserRouter>
-    
+      </ThemeProvider>
+    </React.Fragment>
   );
 }
 
