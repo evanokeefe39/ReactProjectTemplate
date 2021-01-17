@@ -12,7 +12,7 @@ import LandingPage from './pages/LandingPage';
 import { SecurityContext } from './components/SecurityContext';
 import { CssBaseline } from '@material-ui/core';
 import {Theme} from './components/Theme';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import {  ThemeProvider } from '@material-ui/core/styles';
 
 function App() {
   const [user, setUser] = useState(null);

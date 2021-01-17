@@ -19,8 +19,6 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
-
-
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
@@ -86,6 +84,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function PrimarySearchAppBar() {
+
+  console.log("navbar rendered");
   const classes = useStyles();
   const {user, setUser} = useContext(SecurityContext);
 
